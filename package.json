@@ -1,0 +1,23 @@
+{
+  "name": "clean-loop-ai",
+  "version": "1.0.0",
+  "description": "EcoTrack - AI-powered municipal & campus waste management platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "node -e \"console.log('Verifying static assets and dependencies...'); require('fs').accessSync('public/index.html'); require('fs').accessSync('public/style.css'); require('fs').accessSync('public/app.js'); console.log('Static assets verified successfully.');\"",
+    "lint": "node --check server.js test-api.js public/app.js",
+    "test": "node test-api.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
