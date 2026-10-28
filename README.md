@@ -88,3 +88,7 @@ npm start                # Server starts on http://localhost:3000
 | `/api/admin/reports/:id`| `PATCH`| Admin | Update complaint status |
 | `/api/admin/pickups` | `GET` | Admin | Pickup fulfillment queue |
 | `/api/admin/insight` | `POST` | Admin | Generate AI weekly action plan |
+
+## Supported Languages
+
+Hindi (hi), Bengali (bn), Tamil (ta), Telugu (te), Marathi (mr), Gujarati (gu), Kannada (kn), Malayalam (ml) and Punjabi (pa), plus English.
