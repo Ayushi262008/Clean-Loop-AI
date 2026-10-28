@@ -1,0 +1,45 @@
+{
+  "nav_overview": "अवलोकन",
+  "nav_report": "कचरा रिपोर्ट करें",
+  "nav_pickups": "पिकअप",
+  "nav_track": "शिकायत ट्रैक करें",
+  "nav_learn": "सीखें और खेलें",
+  "nav_signin": "साइन इन",
+
+  "app_name": "इकोट्रैक",
+  "waste_system": "अपशिष्ट प्रबंधन प्रणाली",
+
+  "hero_title": "स्वच्छ शहरों की शुरुआत चक्रीय डेटा से होती है",
+  "hero_desc": "इकोट्रैक स्वचालित एआई वर्गीकरण, जियोलोकेटेड रिपोर्टिंग और निर्धारित पिकअप के माध्यम से नागरिकों को नगर निगम स्वच्छता टीमों से जोड़ता है।",
+  "btn_report": "कचरा समस्या की रिपोर्ट करें",
+  "btn_game": "पृथक्करण खेल",
+
+  "total_complaints": "कुल दर्ज शिकायतें",
+  "resolved_complaints": "हल की गई शिकायतें",
+  "pending_complaints": "लंबित / प्रगति पर",
+  "citizen_champions": "नागरिक चैंपियन",
+
+  "qa_report_title": "कचरा रिपोर्ट करें",
+  "qa_report_desc": "फोटो अपलोड करें और समस्या की स्वचालित छंटाई पाएं",
+  "qa_pickup_title": "पिकअप का अनुरोध करें",
+  "qa_pickup_desc": "बड़े, ई-वेस्ट या जैविक कचरे का पिकअप शेड्यूल करें",
+  "qa_track_title": "स्थिति ट्रैक करें",
+  "qa_track_desc": "समाधान की लाइव समयरेखा देखें",
+  "qa_coach_title": "वर्गीकरण सहायक",
+  "qa_coach_desc": "एआई सलाह और कचरा छंटाई खेल",
+
+  "recent_title": "हाल की कचरा रिपोर्टें",
+  "recent_desc": "शहर भर से नागरिकों द्वारा दर्ज की गई ताज़ा शिकायतें",
+  "btn_new_report": "+ नई रिपोर्ट",
+  "circular_title": "चक्रीय प्रक्रिया",
+  "circular_step_resolution": "त्वरित समाधान",
+
+  "status_pending": "लंबित",
+  "status_assigned": "आवंटित",
+  "status_resolved": "समाधान हो गया",
+  "priority_high": "उच्च",
+  "priority_medium": "मध्यम",
+  "priority_low": "निम्न",
+
+  "select_language": "भाषा चुनें"
+}
