@@ -1,5 +1,5 @@
 /**
- * EcoTrack Backend End-to-End Test Suite
+ * Clean Loop AI Backend End-to-End Test Suite
  * Validates authentication, authorization, ownership, database persistence,
  * input validation, error handling, and stats consistency.
  */
@@ -64,7 +64,7 @@ function assert(condition, testName) {
 
 async function runTests() {
   console.log('\n============================================================');
-  console.log('       EcoTrack Backend Comprehensive End-to-End Tests      ');
+  console.log('       Clean Loop AI Backend Comprehensive End-to-End Tests      ');
   console.log('============================================================\n');
 
   try {
