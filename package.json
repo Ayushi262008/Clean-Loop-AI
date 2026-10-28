@@ -1,7 +1,7 @@
 {
   "name": "clean-loop-ai",
   "version": "1.0.0",
-  "description": "EcoTrack - AI-powered municipal & campus waste management platform",
+   "description": "Clean Loop AI - AI-powered municipal & campus waste management platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
