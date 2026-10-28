@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Complaint Tracker</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2bZ3c1Jidc7d9ex71cVHJH+ovD9NCg+8+jmQyBs="
+    crossorigin=""
+  />
+  <style>
+    #map { height: 80vh; width: 100%; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .container { padding: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Complaint Tracker</h2>
+    <div id="map"></div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j+1T9rH1LdKJXyVYdz4QhhJj+EPu9mGGZ3Kp3TE=" crossorigin=""></script>
+  <script>
+    // Extract report ID from query string: ?id=123
+    const params = new URLSearchParams(window.location.search);
+    const reportId = params.get('id');
+    if (!reportId) {
+      document.body.innerHTML = '<p>Report ID not provided.</p>';
+    } else {
+      fetch(`/api/reports/${reportId}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+        .then(res => res.ok ? res.json() : Promise.reject('Failed to load report'))
+        .then(report => {
+          if (!report.lat || !report.lng) {
+            throw 'No location data for this report.';
+          }
+          const map = L.map('map').setView([report.lat, report.lng], 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
+          const marker = L.marker([report.lat, report.lng]).addTo(map);
+          marker.bindPopup(`<b>Status:</b> ${report.status}<br/><b>Category:</b> ${report.category}<br/><b>Area:</b> ${report.area}`).openPopup();
+        })
+        .catch(err => {
+          document.body.innerHTML = `<p>Error: ${err}</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
