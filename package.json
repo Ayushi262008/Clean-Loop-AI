@@ -18,6 +18,9 @@
     "better-sqlite3": "^13.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "i18next": "^26.5.11",
+    "i18next-browser-languagedetector": "^8.2.3",
+    "i18next-http-backend": "^4.0.6",
     "jsonwebtoken": "^9.0.2"
   }
 }
