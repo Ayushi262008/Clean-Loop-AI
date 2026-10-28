@@ -45,9 +45,51 @@ try {
 const app = express();
 const db = new Database(path.join(__dirname, 'cleanloop.db'));
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Configuration (single source of truth; fails fast on missing secrets)
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 function requireEnv(name) {
   const v = process.env[name];
   if (!v) { console.error('Fatal: ' + name + ' environment variable is required. Add it to your .env file.'); process.exit(1); }
@@ -88,9 +130,51 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Database Schema & Migrations
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 db.exec(`
 PRAGMA foreign_keys = ON;
 
@@ -148,9 +232,51 @@ CREATE INDEX IF NOT EXISTS idx_history_report ON history(report_id);
 CREATE INDEX IF NOT EXISTS idx_pickups_user ON pickups(user_id);
 `);
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Initial Seeding
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 const existingAdmin = db.prepare('SELECT id FROM users WHERE contact = ?').get(ADMIN_CONTACT);
 if (!existingAdmin) {
   const adminHash = bcrypt.hashSync(ADMIN_PASSWORD, 10);
@@ -238,9 +364,51 @@ if (countReports === 0) {
   db.prepare("INSERT INTO pickups(user_id, type, address, pdate, status) VALUES(?, '🌿 Bulk or garden waste', 'House 12, Gulmohar Enclave', date('now', '+1 day'), 'Scheduled')").run(u2);
 }
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Validation Helpers
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 function isValidContact(contact) {
   if (typeof contact !== 'string') return false;
   const c = contact.trim();
@@ -262,9 +430,51 @@ function sanitizeText(str, max = 1000) {
   return str.trim().slice(0, max);
 }
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // AI & Fallback Triage Layer
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 async function ai(prompt, imageDataUrl, max = 500) {
   if (!KEY) return null;
   try {
@@ -352,9 +562,51 @@ async function triage(description, photo) {
   return rules(description);
 }
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Authentication & Authorization Middlewares
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 const signToken = u => jwt.sign(
   { id: u.id, role: u.role, name: u.name, contact: u.contact },
   SECRET,
@@ -389,9 +641,51 @@ function admin(req, res, next) {
   next();
 }
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Auth Endpoints
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 app.post('/api/auth/register', limiter(10, 60 * 1000), (req, res) => {
   try {
     let { name, contact, password } = req.body || {};
@@ -469,9 +763,51 @@ app.get('/api/me', auth, (req, res) => {
   });
 });
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Public Information & Leaderboard
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 app.get('/api/public-stats', (req, res) => {
   try {
     const total = db.prepare('SELECT COUNT(*) n FROM reports').get().n;
@@ -515,9 +851,51 @@ app.post('/api/awareness/ask', limiter(10, 60 * 1000), async (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Complaint Management (Citizen)
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 app.post('/api/reports', auth, async (req, res) => {
   try {
     let { area, description, photo, lat, lng } = req.body || {};
@@ -660,9 +1038,51 @@ app.get('/api/reports/:id', auth, (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Doorstep Pickup Management (Citizen)
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 app.post('/api/pickups', auth, (req, res) => {
   try {
     let { type, address, pdate } = req.body || {};
@@ -696,9 +1116,51 @@ app.get('/api/pickups/mine', auth, (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Administrative Operations (Admin Only)
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 
 // Waste Hotspot Analytics Endpoint (Grouped by real location data)
 app.get('/api/admin/hotspots', auth, admin, (req, res) => {
@@ -1095,9 +1557,51 @@ app.post('/api/translate', limiter(30, 60 * 1000), async (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 // Error & 404 Handlers
-// ---------------------------------------------------------------------------
+// Map Tracking Endpoint
+app.get('/api/reports/:id/public', (req, res) => {
+  try {
+    const reportId = parseInt(req.params.id, 10);
+    if (!reportId) return res.status(400).json({ error: 'Invalid report ID.' });
+    const r = db.prepare('SELECT id, area, lat, lng, status, created_at FROM reports WHERE id = ?').get(reportId);
+    if (!r) return res.status(404).json({ error: 'Report not found.' });
+    // Only expose location if lat/lng present
+    const response = {
+      id: r.id,
+      area: r.area,
+      lat: r.lat,
+      lng: r.lng,
+      status: r.status,
+      created_at: r.created_at
+    };
+    return res.json(response);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch report location: ' + err.message });
+  }
+});
+
 app.use('/api/*', (req, res) => {
   res.status(404).json({ error: `API route '${req.originalUrl}' does not exist.` });
 });
