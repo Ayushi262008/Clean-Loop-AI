@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="EcoTrack - Intelligent civic waste management, automated AI triage, community pickups, and interactive waste segregation.">
-  <title>EcoTrack — Waste Management System</title>
+  <meta name="description" content="Clean Loop AI - Intelligent civic waste management, automated AI triage, community pickups, and interactive waste segregation.">
+  <title>Clean Loop AI — Waste Management System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="style.css">
+  <!-- i18n Translation Libraries -->
+    <script src="https://unpkg.com/i18next@23.11.5/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-http-backend@2.5.2/i18nextHttpBackend.min.js"></script>
+    <script src="https://unpkg.com/i18next-browser-languagedetector@8.0.0/i18nextBrowserLanguageDetector.min.js"></script>
 </head>
 <body>
   <!-- Header / Navigation Bar -->
   <header class="app-header">
     <div class="header-container">
-      <div class="brand" id="logo" tabindex="0" role="button" aria-label="EcoTrack Dashboard">
+      <div class="brand" id="logo" tabindex="0" role="button" aria-label="Clean Loop AI Dashboard">
         <div class="brand-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/>
@@ -27,12 +31,21 @@
           </svg>
         </div>
         <div class="brand-text">
-          <span class="brand-name">Eco<b>Track</b></span>
-          <span class="brand-badge">Waste Management System</span>
+          <span class="brand-name">Clean<b>Loop AI</b></span>
+          <span class="brand-badge" data-i18n="waste_system">Waste Management System</span>
         </div>
       </div>
 
       <nav id="nav" class="nav-links" aria-label="Main Navigation"></nav>
+      <!-- Language Dropdown Selector -->
+<!-- Language Dropdown Selector -->
+      <div class="language-selector-container" style="display: inline-block; margin-right: 12px;">
+        <select id="languageSelect" style="background-color: #1b382b; color: #ffffff; border: 1px solid #34d399; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; outline: none;">
+          <option value="" disabled selected style="background-color: #1b382b; color: #a0aec0;">Languages / भाषा</option>
+          <option value="en" style="background-color: #1b382b; color: #ffffff;">English</option>
+          <option value="hi" style="background-color: #1b382b; color: #ffffff;">हिंदी (Hindi)</option>
+        </select>
+      </div>
 
       <div class="header-actions">
         <div id="user-pill"></div>
@@ -95,5 +108,7 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
+
+
 </body>
 </html>

@@ -2133,3 +2133,176 @@ $('#th').onclick = () => {
 // Initial App Boot
 bindModal();
 render();
+// ===== Language switcher + automatic translation =====
+// 1) Exact phrases in your translation.json win (so your own good wording is always used).
+// 2) Anything else is translated automatically by the server (Claude) and remembered.
+const EN_KEYS = {
+  'Waste Management System': 'waste_system',
+  'Overview': 'nav_overview',
+  'Report Waste': 'nav_report',
+  'Pickups': 'nav_pickups',
+  'Track Issues': 'nav_track',
+  'Learn & Play': 'nav_learn',
+  'Sign In': 'nav_signin',
+  'Clean Cities Begin With Circular Data': 'hero_title',
+  'EcoTrack connects citizens with municipal sanitation teams through automated AI triage, geolocated reporting, and scheduled pickups.': 'hero_desc',
+  'Report Waste Issue': 'btn_report',
+  'Segregation Game': 'btn_game',
+  'Total Complaints Filed': 'total_complaints',
+  'Complaints Resolved': 'resolved_complaints',
+  'Pending / In-Progress': 'pending_complaints',
+  'Citizen Champions': 'citizen_champions',
+  'Upload photos & auto-triage issues': 'qa_report_desc',
+  'Request Pickup': 'qa_pickup_title',
+  'Schedule bulk, e-waste, or organic pickups': 'qa_pickup_desc',
+  'Track Status': 'qa_track_title',
+  'View real-time resolution timeline': 'qa_track_desc',
+  'Segregation Coach': 'qa_coach_title',
+  'AI advice & waste sorting game': 'qa_coach_desc',
+  'Recent Waste Reports': 'recent_title',
+  'Latest citizen complaints submitted across the city': 'recent_desc',
+  '+ New Report': 'btn_new_report',
+  'The Circular Process': 'circular_title',
+  'Rapid Resolution': 'circular_step_resolution',
+  'Pending': 'status_pending',
+  'Assigned': 'status_assigned',
+  'Resolved': 'status_resolved',
+  'High': 'priority_high',
+  'Medium': 'priority_medium',
+  'Low': 'priority_low'
+};
+
+let I18N = {};              // your translation.json
+let CUR_LANG = 'en';
+let DICT_READY = true;      // false while translation.json is still loading
+let AUTO = {};              // automatic translations for the current language
+const AUTO_FAILED = new Set();
+const AUTO_QUEUE = new Set();
+let autoTimer = null, autoBusy = false;
+const originals = new WeakMap();
+
+function loadAuto(code) {
+  try { AUTO = JSON.parse(localStorage.getItem('autotr_' + code) || '{}'); } catch (e) { AUTO = {}; }
+}
+function saveAuto(code) {
+  try {
+    const keys = Object.keys(AUTO);
+    if (keys.length > 3000) keys.slice(0, keys.length - 3000).forEach(k => delete AUTO[k]);
+    localStorage.setItem('autotr_' + code, JSON.stringify(AUTO));
+  } catch (e) {}
+}
+
+function lookup(en) {
+  return I18N[EN_KEYS[en]] || I18N[en] || AUTO[en];
+}
+
+// Only send text that contains real English words
+function worthTranslating(en) {
+  return /[A-Za-z]{2}/.test(en) && en.length <= 300 && !/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(en) && !/^https?:\/\//.test(en);
+}
+
+function translatePage() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node;
+  while ((node = walker.nextNode())) {
+    const parent = node.parentElement;
+    const tag = parent && parent.tagName;
+    if (!tag || tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA') continue;
+    if (parent.closest('#languageSelect, [data-no-translate]')) continue;
+    let rec = originals.get(node);
+    if (rec && node.nodeValue !== rec.shown) rec = null;      // the app changed this text itself
+    if (!rec) {
+      const m = node.nodeValue.match(/^([^A-Za-z+]*)(.*?)(\s*)$/s);   // keeps emoji and spacing
+      if (!m || !/[A-Za-z]/.test(m[2])) continue;
+      rec = { pre: m[1], en: m[2], post: m[3], shown: node.nodeValue };
+      originals.set(node, rec);
+    }
+    const found = lookup(rec.en);
+    if (!found && DICT_READY && CUR_LANG !== 'en' && worthTranslating(rec.en) && !AUTO_FAILED.has(rec.en)) AUTO_QUEUE.add(rec.en);
+    const out = rec.pre + (found || rec.en) + rec.post;
+    if (node.nodeValue !== out) node.nodeValue = out;
+    rec.shown = node.nodeValue;
+  }
+  // placeholders and tooltips
+  document.querySelectorAll('[placeholder],[title]').forEach(el => {
+    ['placeholder', 'title'].forEach(attr => {
+      if (!el.hasAttribute(attr)) return;
+      const key = 'en' + attr;
+      if (el.dataset[key] === undefined || (el.getAttribute(attr) !== el.dataset[key + 'Shown'])) {
+        el.dataset[key] = el.getAttribute(attr);
+      }
+      const en = el.dataset[key];
+      const found = lookup(en);
+      if (!found && DICT_READY && CUR_LANG !== 'en' && worthTranslating(en) && !AUTO_FAILED.has(en)) AUTO_QUEUE.add(en);
+      const out = found || en;
+      if (el.getAttribute(attr) !== out) el.setAttribute(attr, out);
+      el.dataset[key + 'Shown'] = out;
+    });
+  });
+  if (AUTO_QUEUE.size) scheduleAuto();
+}
+
+function scheduleAuto() {
+  clearTimeout(autoTimer);
+  autoTimer = setTimeout(flushAuto, 300);        // wait for the page to finish drawing, then send one batch
+}
+
+async function flushAuto() {
+  if (autoBusy || !DICT_READY || !AUTO_QUEUE.size || CUR_LANG === 'en') return;
+  autoBusy = true;
+  const code = CUR_LANG;
+  const batch = [...AUTO_QUEUE].slice(0, 25);
+  batch.forEach(t => AUTO_QUEUE.delete(t));
+  try {
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lang: code, texts: batch })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (code === CUR_LANG) {                                   // ignore if the user switched language meanwhile
+      batch.forEach(t => { if (data.translations && data.translations[t]) AUTO[t] = data.translations[t]; else AUTO_FAILED.add(t); });
+      saveAuto(code);
+      translatePage();
+    }
+  } catch (e) {
+    console.warn('Auto-translate unavailable:', e.message);
+    batch.forEach(t => AUTO_FAILED.add(t));                    // stay in English for these, do not retry in a loop
+  }
+  autoBusy = false;
+  if (AUTO_QUEUE.size) scheduleAuto();
+}
+
+async function setLang(code) {
+  code = code || 'en';
+  CUR_LANG = code;
+  I18N = {};
+  AUTO = {};
+  AUTO_QUEUE.clear();
+  AUTO_FAILED.clear();
+  if (code !== 'en') {
+    DICT_READY = false;
+    loadAuto(code);
+    try { I18N = await (await fetch('/locales/' + code + '/translation.json')).json(); }
+    catch (e) { console.warn('No dictionary file for', code, '- using automatic translation only'); }
+    if (code !== CUR_LANG) return;            // user switched again while loading
+    DICT_READY = true;
+  }
+  translatePage();
+  document.documentElement.lang = code;
+  localStorage.setItem('lang', code);
+  const sel = document.getElementById('languageSelect');
+  if (sel) sel.value = code;
+}
+
+// Re-translate whenever the app draws new content (menus, cards, tables, messages)
+let pendingFrame = false;
+new MutationObserver(() => {
+  if (pendingFrame) return;
+  pendingFrame = true;
+  requestAnimationFrame(() => { pendingFrame = false; translatePage(); });
+}).observe(document.body, { childList: true, subtree: true });
+
+document.getElementById('languageSelect').addEventListener('change', e => setLang(e.target.value));
+setLang(localStorage.getItem('lang') || 'en');
