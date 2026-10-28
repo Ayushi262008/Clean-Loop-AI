@@ -92,3 +92,10 @@ npm start                # Server starts on http://localhost:3000
 ## Supported Languages
 
 Hindi (hi), Bengali (bn), Tamil (ta), Telugu (te), Marathi (mr), Gujarati (gu), Kannada (kn), Malayalam (ml) and Punjabi (pa), plus English.
+
+## Deploying on Render
+
+1. Push the repo to GitHub and create a new Web Service on Render.
+2. Build command: `npm install`. Start command: `npm start`.
+3. Add JWT_SECRET, ADMIN_PASSWORD, GEMINI_API_KEY and GEMINI_MODEL in the Environment tab. Never upload your .env file.
+4. SQLite keeps data in a file. Attach a persistent disk and set DB_PATH to a file on it (for example /var/data/cleanloop.db), otherwise data can reset when the service restarts.
